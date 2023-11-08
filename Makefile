@@ -7,11 +7,9 @@ PRECMD=echo "  $(@F)" ; mkdir -p $(@D) ;
 # do_linux_desktop_integration
 # X LINUX/WINDOWS/MAC
 
-CC:=gcc -std=gnu99 -no-pie -Wall -DLINUX -O3 -c
+CC:=gcc -std=gnu99 -no-pie -Wall -DLINUX -O3 -c -MMD -I../ra3/out/include
 LD:=gcc
 LDPOST:=../ra3/out/libemuhost.a -lz -lX11 -lGLX -lGL -lGLESv2 -lasound -lpthread -lm -lpulse -lpulse-simple -ldrm -lgbm -lEGL
-# TODO: Eliminate SDL. Including for now just to get things building.
-LDPOST+=-lSDL2
 
 # Everything I'm adding, which just be Emuhost glue, builds in the usual fashion.
 SRCFILES:=$(shell find src -type f)
@@ -33,4 +31,4 @@ $(EXE):$(OFILES);$(PRECMD) $(LD) -o $@ $(OFILES) $(LDPOST)
 clean:;rm -rf mid out
 
 run:$(EXE);$(EXE) ~/rom/atari2600/p/pacman.bin
-emuhost:;make ../ra3 ; rm -f $(EXE)
+emuhost:;make -C../ra3 ; rm -f $(EXE)

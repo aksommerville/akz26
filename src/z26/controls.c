@@ -4,6 +4,11 @@
 
 /* control key definitions */
 
+//aks: These were provided by SDL; we don't want them.
+static int srv_mouse_button=0;
+static int srv_micky_x=0;
+static int srv_micky_y=0;
+
 #define KeyEsc 		SDLK_ESCAPE&0x1ff	/* ESC (Quit) */
 
 #define KeyF1 		SDLK_F1&0x1ff		/* F1  (Reset) */
@@ -1500,20 +1505,9 @@ void Controls(void)
 {
 /* allow picture shifting only every couple of frames */
 	static int CtrlSkipCount = 0;
-	
-	if (GamePaused && !GameReallyPaused)
-	{
-		if (StartInGUI)
-		{
-			srv_CopyScreen();
-			StartInGUI = 0;
-		}
-		gui();
-		return;
-	}
 
-	srv_Events();			/* process SDL controller events */
-	srv_get_mouse_movement();	/* poll mouse */
+	//srv_Events();			/* process SDL controller events */
+	//srv_get_mouse_movement();	/* poll mouse */
 
 	KeyTable[KeyAlt] = KeyTable[KeyLAlt] | KeyTable[KeyRAlt] | KeyTable[KeyLMeta] | KeyTable[KeyRMeta];
 	KeyTable[KeyCtrl] = KeyTable[KeyLCtrl] | KeyTable[KeyRCtrl];
@@ -1577,12 +1571,12 @@ void Controls(void)
 	{
 		GamePaused = 0;			/* resume game */
 		GameReallyPaused = 0;
-		srv_reset_timing();		
+		//srv_reset_timing();		
 	}
 	if ((KeyTable[KeyEnter])&&(KeyTable[KeyAlt])) 
 	{
 		FullScreen = !FullScreen;	/* toggle fullscreen */
-		srv_SetVideoMode();
+		//srv_SetVideoMode();
 		KeyTable[KeyEnter] = 0;
 		KeyTable[KeyAlt] = 0;
 	}
@@ -1603,11 +1597,11 @@ void Controls(void)
 			/* there are only 3 palettes, so start over at 0 */
 			if (PaletteNumber > 2) PaletteNumber = 0;
 			
-			if (PaletteNumber == 0) set_status("NTSC colors");
-			if (PaletteNumber == 1) set_status("PAL colors");
-			if (PaletteNumber == 2) set_status("SECAM colors");
+			//if (PaletteNumber == 0) set_status("NTSC colors");
+			//if (PaletteNumber == 1) set_status("PAL colors");
+			//if (PaletteNumber == 2) set_status("SECAM colors");
 			
-			srv_SetVideoMode();
+			//srv_SetVideoMode();
 			KeyTable[KeyMinus] = 0;
 		}
 
@@ -1636,43 +1630,43 @@ void Controls(void)
 	if (KeyTable[ResetKey]) 
 	{
 		IOPortB = IOPortB & 0xfe;	/* bit 0 = RESET */
-		set_status("RESET");
+		//set_status("RESET");
 	}
 	if (KeyTable[SelectKey]) 
 	{
 		IOPortB = IOPortB & 0xfd;	/* bit 1 = SELECT */
-		set_status("SELECT");
+		//set_status("SELECT");
 	}
 
 	if (KeyTable[P0Easy]) 
 	{
 		IOPortB = IOPortB & 0xbf;	/* bit 6 = P0 difficulty */
-		set_status("Player 0 Easy");
+		//set_status("Player 0 Easy");
 	}
 	if (KeyTable[P0Hard]) 
 	{
 		IOPortB = IOPortB | 0x40;
-		set_status("Player 0 Hard");
+		//set_status("Player 0 Hard");
 	}
 	if (KeyTable[P1Easy]) 
 	{
 		IOPortB = IOPortB & 0x7f;	/* bit 7 = P1 difficulty */
-		set_status("Player 1 Easy");
+		//set_status("Player 1 Easy");
 	}
 	if (KeyTable[P1Hard]) 
 	{
 		IOPortB = IOPortB | 0x80;
-		set_status("Player 1 Hard");
+		//set_status("Player 1 Hard");
 	}
 	if (KeyTable[BWKey]) 
 	{
 		IOPortB = IOPortB & 0xf7;	/* bit 3 = COLOR / BW */
-		set_status("Black and White");
+		//set_status("Black and White");
 	}
 	if (KeyTable[ColorKey]) 
 	{
 		IOPortB = IOPortB | 0x08;
-		set_status("Color");
+		//set_status("Color");
 	}
 
 	switch (LeftController)

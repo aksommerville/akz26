@@ -6,7 +6,7 @@ void jam(void){
 	AddressBus = reg_pc - 1;
 //	(*ReadROMAccess)();			// <--- *** poison *** ---
 	if(Starpath && (DataBus == 0x52)) StarpathJAM();
-	else set_status("Jammed");
+	//else set_status("Jammed");
 }
 
 /**

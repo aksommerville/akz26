@@ -51,8 +51,6 @@ void AdjustPalette() {
 		if (PaletteNumber == 1) return;
 		PaletteNumber = 1;
 	}
-	srv_SetPalette();
-	ClearScreenBuffers();
 	position_game();
 }
 

@@ -278,6 +278,10 @@ void def_LoadDefaults(void)
 	KeyboardEnabled = 1;
 
 	Seconds = time(&MyTime);	/* randomize RIOT timer (in RIOT.ASM)*/
+	
+	// aks: This was formerly done by sdlsrv.c:Init_SDL()
+	ScreenBuffer = RealScreenBuffer1;
+	ScreenBufferPrev = RealScreenBuffer2;
 }
 
 // C-engine specific

@@ -72,6 +72,7 @@ void ScanFrame()
 		}
 		if (ExitEmulator) break;
 	} while (Frame == PrevFrame); 			/* Frame is updated by tiawrite.c */
+	QueueEofSoundBytes();
 
 	BlankBufferEnd();
 	PrevFrame = Frame;
@@ -85,36 +86,7 @@ void Reset_emulator(void)
 	RecognizeCart();
 	SetupBanks();
 	Reset();
-	Init_Service();
 	Controls();
-}
-
-
-/* 
-	Entry point. 
-*/
-
-void c_emulator(void) {
-
-	InitData();
-	Init_Service();
-	Controls();
-
-	/* ExitEmulator gets set by Controls() if the user presses Escape */
-	while( !ExitEmulator ) 
-	{
-	if(ResetEmulator) Reset_emulator();
-
-		srv_Events();
-		if(srv_done) break;	/* SDL got a 'close window' message */
-
-		ScanFrame();
-		Controls();
-		srv_CopyScreen();
-		while(GamePaused) Controls();
-	}
-	
-	srv_Cleanup();	/* shutdown SDL */
 }
 
 

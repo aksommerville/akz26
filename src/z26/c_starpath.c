@@ -86,22 +86,22 @@ void SetStarpath(void){
 
 void ShowJAMmessage(void){
 	sprintf(msg, "JAM instruction %02x @ %04x\n", reg_a, reg_pc);
-	srv_print(msg);
-	SDL_Delay(2000);
+	//srv_print(msg);
+	//SDL_Delay(2000);
 	Exit_Game();
 }
 
 void StarpathLoadNotFound(void){
 	sprintf(msg, "Unable to find load %02x\n", SC_ControlByte);
-	srv_print(msg);
-	SDL_Delay(2000);
+	//srv_print(msg);
+	//SDL_Delay(2000);
 	Exit_Game();
 }
 
 void StarpathRealJAM(void){
 	sprintf(msg, "Starpath call @ %04x\n", reg_pc);
-	srv_print(msg);
-	SDL_Delay(2000);
+	//srv_print(msg);
+	//SDL_Delay(2000);
 	Exit_Game();
 }
 

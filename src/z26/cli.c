@@ -227,7 +227,7 @@ db SCBIOS[188] = {
 	if (Lookup(BLACKLIST))
 	{
 		sprintf(msg, " Game not supported.");
-		srv_print(msg);
+		//srv_print(msg);
 		return(0);
 	}
 
@@ -251,8 +251,8 @@ int GetController(char *p)
 	if (LocalController == -1)
 	{
 		sprintf(msg, "Unknown controller type: %s", p);
-		srv_print(msg);
-		SDL_Quit();
+		//srv_print(msg);
+		//SDL_Quit();
 		exit(1);
 	}
 	return(LocalController);
@@ -378,8 +378,8 @@ void cli_InterpretParm(char *p)
 					case ' ':								break;
 					default:
 						sprintf(msg, "Bad PC controller seen: %c", p[i]);
-						srv_print(msg);
-						SDL_Quit();
+						//srv_print(msg);
+						//SDL_Quit();
 						exit(1);
 						break;
 					}
@@ -406,7 +406,7 @@ void cli_InterpretParm(char *p)
 				if (zlog == NULL)
 				{
 					sprintf(msg, "Couldn't build log file: %s", z26log);
-					srv_print(msg);
+					//srv_print(msg);
 					TraceCount = 0;
 					TraceEnabled = 0;
 					OldTraceCount = 0;
@@ -415,7 +415,7 @@ void cli_InterpretParm(char *p)
 				break;
 
 	default:   	sprintf(msg, "Ignoring parameter: -%c\n", ch);
-				srv_print(msg);
+				//srv_print(msg);
 				break;
 	}
 }
@@ -430,8 +430,8 @@ void cli_WriteParms(int argc, char *argv[])
 	if (fp == NULL)
 	{
 		sprintf(msg, "Couldn't build z26.cli file: %s", z26cli);
-		srv_print(msg);
-		SDL_Quit();
+		//srv_print(msg);
+		//SDL_Quit();
 		exit(1);
 	}
 
@@ -465,8 +465,8 @@ void cli_SaveParms()
 	if (fp == NULL)
 	{
 		sprintf(msg, "Couldn't build z26.gui file.");
-		srv_print(msg);
-		SDL_Quit();
+		//srv_print(msg);
+		//SDL_Quit();
 		exit(1);
 	}
 	
@@ -561,7 +561,7 @@ void cli_write_CRC(char *filename)
 	
 	xfp = fopen("z26.crc", "a");
 	if (xfp == NULL)
-		srv_print("Couldn't open CRC file.");
+		;//srv_print("Couldn't open CRC file.");
 	else
 	{
 		fprintf(xfp,"  0x%08x,  /* %s */\n", crc, filename);
@@ -613,16 +613,16 @@ void cli_CommandLine(int argc, char *argv[])
 	{
 		cli_WriteParms(argc, argv);
 		sprintf(msg, "\nParameters recorded.\n\nTo restore defaults\ndelete z26.cli.\n");
-		srv_print(msg);
-		SDL_Quit();
+		//srv_print(msg);
+		//SDL_Quit();
 		exit(1);
 	}
 
 	if (!ROMLoaded)
 	{
 		sprintf(msg, "File not found: %s", FileName);
-		srv_print(msg);
-		SDL_Quit();
+		//srv_print(msg);
+		//SDL_Quit();
 		exit(1);
 	}
 

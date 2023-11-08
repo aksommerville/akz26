@@ -19,7 +19,27 @@
  It seems to work on most modern platforms though.
 */
 
+/* aks: Simpler buffering.
+ * In theory we should be producing 523 samples per video frame.
+ */
+#define AUDIO_BUFFER_LIMIT 8192
+static int8_t z26_audio_buffer[AUDIO_BUFFER_LIMIT];
+static int8_t *z26_audio_buffer_next=z26_audio_buffer;
+static int discard=0;
+
+int z26_get_audio_buffer(void *dstpp) {
+  *(void**)dstpp=z26_audio_buffer;
+  int c=z26_audio_buffer_next-z26_audio_buffer;
+  z26_audio_buffer_next=z26_audio_buffer;
+  if (discard) {
+    fprintf(stderr,"discard %d frames\n",discard);
+    discard=0;
+  }
+  return c;
+}
+
 void QueueSoundByte() {
+  uint8_t SQ_byte=0;
 	if (KidvidFileOpened && KidVid)
 	{
 		kv_GetNextSampleByte();
@@ -27,16 +47,10 @@ void QueueSoundByte() {
 	}
 	else
 		SQ_byte = TIA_Sound_Byte() >> 1;
-
-	SQ_resample--;
-	if (SQ_resample == 2) SQ_Store();
-	if (SQ_resample == 0)
-	{
-		SQ_resample = 5;
-		SQ_Store();
-	}
-	
-	SQ_Store();
+	if (z26_audio_buffer_next<z26_audio_buffer+AUDIO_BUFFER_LIMIT) {
+   	  *z26_audio_buffer_next=SQ_byte;
+ 	  z26_audio_buffer_next++;
+ 	} else discard++;
 }
 
 
@@ -46,20 +60,13 @@ void QueueSoundByte() {
 */
 
 void QueueSoundBytes() {
-	if (quiet) return;
-	if (SQ_Count() >= SQ_Max-4) 
-	{
-		if (Vsync) SDL_Delay(1);	// overflowed -- slow game down
-		return;
-	}
-	if (SQ_Count() >= 5*SQ_BUCKET) 
-	{
-		if (Vsync) SDL_Delay(1);	// overflowing -- slow game down
-	}
-	do {
-		QueueSoundByte();
-		QueueSoundByte();
-	} while(SQ_Count() < 2*SQ_BUCKET);
+	int i=2; // 523 per video frame, but this is called every scan line. With 2, it seems to work out.
+	while (i-->0) QueueSoundByte();
+}
+
+void QueueEofSoundBytes() {//aks: Added this to run at the end of each video frame to make up the difference. Doesn't seem to help.
+  int i=10;
+  while (i-->0) QueueSoundByte();
 }
 
 

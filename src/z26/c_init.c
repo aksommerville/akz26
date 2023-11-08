@@ -61,7 +61,6 @@ void InitData() {
 	Init_P2();
 	Init_Starpath();
 	Init_Tiasnd();
-	Init_SoundQ();
 
 	RandomizeRIOTTimer();
 }
