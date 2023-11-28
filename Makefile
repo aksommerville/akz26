@@ -7,9 +7,11 @@ PRECMD=echo "  $(@F)" ; mkdir -p $(@D) ;
 # do_linux_desktop_integration
 # X LINUX/WINDOWS/MAC
 
+LIBEMUHOST:=../ra3/out/libemuhost.a 
+
 CC:=gcc -std=gnu99 -no-pie -Wall -DLINUX -O3 -c -MMD -I../ra3/out/include
 LD:=gcc
-LDPOST:=../ra3/out/libemuhost.a -lz -lX11 -lGLX -lGL -lGLESv2 -lasound -lpthread -lm -lpulse -lpulse-simple -ldrm -lgbm -lEGL
+LDPOST:=$(LIBEMUHOST) -lz -lX11 -lXinerama -lGLX -lGL -lGLESv2 -lasound -lpthread -lm -lpulse -lpulse-simple -ldrm -lgbm -lEGL
 
 # Everything I'm adding, which just be Emuhost glue, builds in the usual fashion.
 SRCFILES:=$(shell find src -type f)
@@ -26,7 +28,7 @@ mid/z26/z26.o:src/z26/z26.c;$(PRECMD) $(CC) -o$@ $<
 
 EXE:=out/akz26
 all:$(EXE)
-$(EXE):$(OFILES);$(PRECMD) $(LD) -o $@ $(OFILES) $(LDPOST)
+$(EXE):$(OFILES) $(LIBEMUHOST);$(PRECMD) $(LD) -o $@ $(OFILES) $(LDPOST)
 
 clean:;rm -rf mid out
 
