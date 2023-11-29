@@ -1510,7 +1510,7 @@ void ControlSWCHAWrite()
 void Controls(void)
 {
 /* allow picture shifting only every couple of frames */
-	static int CtrlSkipCount = 0;
+	//static int CtrlSkipCount = 0;
 
 	//srv_Events();			/* process SDL controller events */
 	//srv_get_mouse_movement();	/* poll mouse */

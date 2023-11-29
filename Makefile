@@ -7,12 +7,15 @@ PRECMD=echo "  $(@F)" ; mkdir -p $(@D) ;
 # do_linux_desktop_integration
 # X LINUX/WINDOWS/MAC
 
-LIBEMUHOST:=../ra3/out/libemuhost.a 
+EHCFG:=../ra3/out/emuhost-config
+EH_CFLAGS:=$(shell $(EHCFG) --cflags)
+EH_LDFLAGS:=$(shell $(EHCFG) --ldflags)
+EH_LIBS:=$(shell $(EHCFG) --libs)
+EH_DEPS:=$(shell $(EHCFG) --deps)
 
-CC:=gcc -std=gnu99 -no-pie -Wall -Wno-comment -DLINUX -O3 -c -MMD -I../ra3/out/include
-LD:=gcc
-#LDPOST:=$(LIBEMUHOST) -lz -lX11 -lXinerama -lGLX -lGL -lGLESv2 -lasound -lpthread -lm -lpulse -lpulse-simple -ldrm -lgbm -lEGL
-LDPOST:=$(LIBEMUHOST) -lz -lGLESv2 -lpthread -lm -ldrm -lgbm -lEGL
+CC:=gcc -std=gnu99 -no-pie -Wall -Wno-comment -DLINUX -O3 -c -MMD $(EH_CFLAGS)
+LD:=gcc $(EH_LDFLAGS)
+LDPOST:=$(EH_LIBS)
 
 # Everything I'm adding, which just be Emuhost glue, builds in the usual fashion.
 SRCFILES:=$(shell find src -type f)
@@ -29,7 +32,7 @@ mid/z26/z26.o:src/z26/z26.c;$(PRECMD) $(CC) -o$@ $<
 
 EXE:=out/akz26
 all:$(EXE)
-$(EXE):$(OFILES) $(LIBEMUHOST);$(PRECMD) $(LD) -o $@ $(OFILES) $(LDPOST)
+$(EXE):$(OFILES) $(EH_DEPS);$(PRECMD) $(LD) -o $@ $(OFILES) $(LDPOST)
 
 clean:;rm -rf mid out
 
