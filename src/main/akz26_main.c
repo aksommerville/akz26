@@ -99,11 +99,26 @@ static void akz26_update_joysticks() {
 /* Paddles input.
  */
  
+static void akz26_fake_paddle(int padp,uint16_t state) {
+  const int speed=15;
+  switch (state&(EH_BTN_LEFT|EH_BTN_RIGHT)) {
+    case EH_BTN_LEFT: if ((akz26_paddlev[padp]-=speed)<0) akz26_paddlev[padp]+=1000; break;
+    case EH_BTN_RIGHT: if ((akz26_paddlev[padp]+=speed)>999) akz26_paddlev[padp]-=1000; break;
+  }
+}
+ 
 static void akz26_update_paddles() {
   uint16_t p1=eh_input_get(1);
   uint16_t p2=eh_input_get(2);
   uint16_t p3=eh_input_get(3);
   uint16_t p4=eh_input_get(4);
+  
+  // We'll read from Atari joysticks, but also use the generic dpad.
+  akz26_fake_paddle(0,p1);
+  akz26_fake_paddle(1,p2);
+  akz26_fake_paddle(2,p3);
+  akz26_fake_paddle(3,p4);
+  
   IOPortA=0xcc;
   IOPortB=0xff;
   if (p1&EH_BTN_SOUTH) IOPortA&=~0x7f;
