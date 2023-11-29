@@ -9,6 +9,7 @@ static int srv_mouse_button=0;
 static int srv_micky_x=0;
 static int srv_micky_y=0;
 
+#if 0 //aks
 #define KeyEsc 		SDLK_ESCAPE&0x1ff	/* ESC (Quit) */
 
 #define KeyF1 		SDLK_F1&0x1ff		/* F1  (Reset) */
@@ -115,59 +116,60 @@ static int srv_micky_y=0;
 #define KPHome 		SDLK_KP_7&0x1ff
 
 #define KeyBackTick SDLK_BACKQUOTE&0x1ff
+#endif
 
 /* define control keys */
 
-#define P1Left 		KeyLeft
-#define P1Right 	KeyRight
-#define P1Up 		KeyUp
-#define P1Down 		KeyDown
-#define P1Fire 		KeyCtrl
-#define P1TriggerBG 	KeySlash
-#define P1BoosterBG 	KeyRShift
+#define P1Left 		1 /* KeyLeft*/
+#define P1Right 	2 /* KeyRight*/
+#define P1Up 		3 /* KeyUp*/
+#define P1Down 		4 /* KeyDown*/
+#define P1Fire 		5 /* KeyCtrl*/
+#define P1TriggerBG 	6 /* KeySlash*/
+#define P1BoosterBG 	7 /* KeyRShift*/
 
-#define P2Left 		KeyS
-#define P2Right 	KeyF
-#define P2Up 		KeyE
-#define P2Down 		KeyD
-#define P2Fire 		KeyN
-#define P2TriggerBG 	KeyB
-#define P2BoosterBG 	KeyV
+#define P2Left 		8 /* KeyS*/
+#define P2Right 	9 /* KeyF*/
+#define P2Up 		10 /* KeyE*/
+#define P2Down 		11 /* KeyD*/
+#define P2Fire 		12 /* KeyN*/
+#define P2TriggerBG 	13 /* KeyB*/
+#define P2BoosterBG 	14 /* KeyV*/
 
-#define P1Pad1 		Key7
-#define P1Pad2 		Key8
-#define P1Pad3 		Key9
-#define P1Pad4 		KeyU
-#define P1Pad5 		KeyI
-#define P1Pad6 		KeyO
-#define P1Pad7 		KeyJ
-#define P1Pad8 		KeyK
-#define P1Pad9 		KeyL
-#define P1PadStar 	KeyM		/* * */
-#define P1Pad0 		KeyComma
-#define P1PadPound 	KeyDot		/* # */
+#define P1Pad1 		15 /* Key7*/
+#define P1Pad2 		16 /* Key8*/
+#define P1Pad3 		17 /* Key9*/
+#define P1Pad4 		18 /* KeyU*/
+#define P1Pad5 		19 /* KeyI*/
+#define P1Pad6 		20 /* KeyO*/
+#define P1Pad7 		21 /* KeyJ*/
+#define P1Pad8 		22 /* KeyK*/
+#define P1Pad9 		23 /* KeyL*/
+#define P1PadStar 	24 /* KeyM		/* * */
+#define P1Pad0 		25 /* KeyComma*/
+#define P1PadPound 	26 /* KeyDot		/* # */
 
-#define P2Pad1 		Key1
-#define P2Pad2 		Key2
-#define P2Pad3 		Key3
-#define P2Pad4 		KeyQ
-#define P2Pad5 		KeyW
-#define P2Pad6 		KeyE
-#define P2Pad7 		KeyA
-#define P2Pad8 		KeyS
-#define P2Pad9 		KeyD
-#define P2PadStar 	KeyZ		/* * */
-#define P2Pad0 		KeyX
-#define P2PadPound 	KeyC		/* # */
+#define P2Pad1 		27 /* Key1*/
+#define P2Pad2 		28 /* Key2*/
+#define P2Pad3 		29 /* Key3*/
+#define P2Pad4 		30 /* KeyQ*/
+#define P2Pad5 		31 /* KeyW*/
+#define P2Pad6 		32 /* KeyE*/
+#define P2Pad7 		33 /* KeyA*/
+#define P2Pad8 		34 /* KeyS*/
+#define P2Pad9 		35 /* KeyD*/
+#define P2PadStar 	36 /* KeyZ		/* * */
+#define P2Pad0 		37 /* KeyX*/
+#define P2PadPound 	38 /* KeyC		/* # */
 
-#define ResetKey 	KeyF1
-#define SelectKey 	KeyF2
-#define BWKey		KeyF3
-#define ColorKey 	KeyF4
-#define P0Easy 		KeyF5
-#define P0Hard 		KeyF6
-#define P1Easy 		KeyF7
-#define P1Hard 		KeyF8
+#define ResetKey 	39 /* KeyF1*/
+#define SelectKey 	40 /* KeyF2*/
+#define BWKey		41 /* KeyF3*/
+#define ColorKey 	42 /* KeyF4*/
+#define P0Easy 		43 /* KeyF5*/
+#define P0Hard 		44 /* KeyF6*/
+#define P1Easy 		45 /* KeyF7*/
+#define P1Hard 		46 /* KeyF8*/
 
 void Exit_Game(void)
 {
@@ -1037,6 +1039,7 @@ void DoKidVid_L()
 
 void DoKidVid_R()
 {
+#if 0 //aks
 	if (KeyTable[KeyF1])
 	{
 		KeyTable[KeyF1] = 0;
@@ -1121,6 +1124,7 @@ void DoKidVid_R()
 			KidVidBlockIdx = KVBLOCKBITS;
 		}
 	}
+#endif
 }
 
 //db MindlinkOR = 0x80;		/* set data bit */
@@ -1374,6 +1378,7 @@ void InitCompuMate()
 
 void DoCompuMate_LR()
 {
+#if 0 //aks
 	ChargeTrigger0[1] = 0;	/* will expire immediately / will be read as 0x80 */
 	ChargeTrigger0[2] = 0;
 
@@ -1451,6 +1456,7 @@ void DoCompuMate_LR()
 		default:
 		break;
 	}
+#endif
 }
 
 void DoNoController_L()
@@ -1508,7 +1514,7 @@ void Controls(void)
 
 	//srv_Events();			/* process SDL controller events */
 	//srv_get_mouse_movement();	/* poll mouse */
-
+#if 0 //aks
 	KeyTable[KeyAlt] = KeyTable[KeyLAlt] | KeyTable[KeyRAlt] | KeyTable[KeyLMeta] | KeyTable[KeyRMeta];
 	KeyTable[KeyCtrl] = KeyTable[KeyLCtrl] | KeyTable[KeyRCtrl];
 
@@ -1586,7 +1592,9 @@ void Controls(void)
 //		KeyTable[KeyEquals] = 0;	/* ... because SDLK_EQUALS&0x1ff == SDLK_F4&0x1ff ... */
 //		SaveScreenshot();			/* screenshots don't look so great with ... */
 //	}								/* ... square textures anyway */
+#endif
 
+#if 0 //aks
 	if (KeyTable[KeyAlt])	/* alter display only when ALT is pressed */
 	{
 		if (KeyTable[KeyMinus])	/* cycle through palettes - NTSC, PAL, SECAM */
@@ -1612,18 +1620,20 @@ void Controls(void)
 			KeyTable[KeyAlt] = 0;
 		}
 	}
-	
+#endif
+#if 0 //aks	
 	if (KeyTable[KeyTab])	/* cycle through mouse directions for paddle */
 	{
 		KeyTable[KeyTab] = 0;
 		MPdirection = (MPdirection - 1) & 0x03;
 	}
+#endif
 
 	/* enable trace output when -t command line switch was used */
-	if (KeyTable[KeyF11] && TraceEnabled) TraceCount = OldTraceCount;
+	//if (KeyTable[KeyF11] && TraceEnabled) TraceCount = OldTraceCount;
 
 	/* disable trace output when -t command line switch was used */
-	if (KeyTable[KeyF12] && TraceEnabled) TraceCount = 0;
+	//if (KeyTable[KeyF12] && TraceEnabled) TraceCount = 0;
 
 /* handle VCS console switches */	
 	IOPortB = IOPortB | 0x03;	/* turn on Select and Reset bits */

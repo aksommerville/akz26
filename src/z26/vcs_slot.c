@@ -13,6 +13,8 @@
 // stripped down and converted to C for z26
 // Aug 7, 2019
 
+#include <stdint.h>
+
 // z26 compatible cart type definitions
 
 #define Z26_2K	0		// (by size)

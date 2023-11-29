@@ -9,9 +9,10 @@ PRECMD=echo "  $(@F)" ; mkdir -p $(@D) ;
 
 LIBEMUHOST:=../ra3/out/libemuhost.a 
 
-CC:=gcc -std=gnu99 -no-pie -Wall -DLINUX -O3 -c -MMD -I../ra3/out/include
+CC:=gcc -std=gnu99 -no-pie -Wall -Wno-comment -DLINUX -O3 -c -MMD -I../ra3/out/include
 LD:=gcc
-LDPOST:=$(LIBEMUHOST) -lz -lX11 -lXinerama -lGLX -lGL -lGLESv2 -lasound -lpthread -lm -lpulse -lpulse-simple -ldrm -lgbm -lEGL
+#LDPOST:=$(LIBEMUHOST) -lz -lX11 -lXinerama -lGLX -lGL -lGLESv2 -lasound -lpthread -lm -lpulse -lpulse-simple -ldrm -lgbm -lEGL
+LDPOST:=$(LIBEMUHOST) -lz -lGLESv2 -lpthread -lm -ldrm -lgbm -lEGL
 
 # Everything I'm adding, which just be Emuhost glue, builds in the usual fashion.
 SRCFILES:=$(shell find src -type f)

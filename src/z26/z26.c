@@ -42,10 +42,10 @@ char z26wav[1024] = {0};
 
 FILE *parmfp = NULL;
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_audio.h>
-#include <SDL2/SDL_opengl.h>
-#include <SDL2/SDL_keyboard.h>
+//#include <SDL2/SDL.h>
+//#include <SDL2/SDL_audio.h>
+//#include <SDL2/SDL_opengl.h>
+//#include <SDL2/SDL_keyboard.h>
 
 typedef unsigned long long int  dq;
 typedef unsigned int			dd;

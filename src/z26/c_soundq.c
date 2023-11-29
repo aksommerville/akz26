@@ -22,6 +22,7 @@
 /* aks: Simpler buffering.
  * In theory we should be producing 523 samples per video frame.
  */
+#include <stdint.h>
 #define AUDIO_BUFFER_LIMIT 8192
 static int8_t z26_audio_buffer[AUDIO_BUFFER_LIMIT];
 static int8_t *z26_audio_buffer_next=z26_audio_buffer;
