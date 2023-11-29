@@ -43,7 +43,7 @@ void ReadPortB(void){			//  read console switches (port b)
 
 void ReadPortA(void){			//  read hand controllers (port a)
 
-	UpdateTrakBall(ScanLine);
+	//UpdateTrakBall(ScanLine);
 /* pins grounded by controller read0 even on pins where HIGH was written to (see Star Raiders) */
 	DataBus = ((IOPortA_Controllers | IOPortA_UnusedBits) & IOPortA) &
 		((DDR_A ^ 0xff) | IOPortA_Write);
@@ -58,7 +58,7 @@ void WritePortA(void){
 	/* make sure only output bits get wtitten to SWCHA */
 	IOPortA = (DataBus & DDR_A) | ((DDR_A ^ 0xff) & IOPortA);
 	/* update controllers on SWCHA write (KEypad, Compumate, Mindlink) */
-	ControlSWCHAWrite();
+	//ControlSWCHAWrite();
 }
 	
 void WriteDDR_A(void){

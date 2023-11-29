@@ -1308,7 +1308,7 @@ void SetupBanks() {
 	}
 	else if( BSType == 10 ) {
 		RomBank = 0x3000;
-		InitCompuMate();
+		//InitCompuMate();
 	}
 
 //	Show_BSType();

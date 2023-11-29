@@ -55,7 +55,7 @@ void ReadHardware(void){
 				if(ChargeTrigger0[AddressBus & 0x3] <= ChargeCounter)
 					{ DataBus |= 0x80; }
 			}else{
-				TestLightgunHit(RClock, ScanLine);	/* JS */
+				//TestLightgunHit(RClock, ScanLine);	/* JS */
 				DataBus |= InputLatch[AddressBus & 0x1];
 			}
 		}

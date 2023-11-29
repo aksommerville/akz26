@@ -4,10 +4,11 @@
 
 /* control key definitions */
 
-//aks: These were provided by SDL; we don't want them.
+/*aks: These were provided by SDL; we don't want them.
 static int srv_mouse_button=0;
 static int srv_micky_x=0;
 static int srv_micky_y=0;
+/**/
 
 #if 0 //aks
 #define KeyEsc 		SDLK_ESCAPE&0x1ff	/* ESC (Quit) */
@@ -119,7 +120,7 @@ static int srv_micky_y=0;
 #endif
 
 /* define control keys */
-
+#if 0
 #define P1Left 		1 /* KeyLeft*/
 #define P1Right 	2 /* KeyRight*/
 #define P1Up 		3 /* KeyUp*/
@@ -170,7 +171,9 @@ static int srv_micky_y=0;
 #define P0Hard 		44 /* KeyF6*/
 #define P1Easy 		45 /* KeyF7*/
 #define P1Hard 		46 /* KeyF8*/
+#endif
 
+/* move to c_starpath.c; the only file using it
 void Exit_Game(void)
 {
 	ExitEmulator = 128;
@@ -178,8 +181,9 @@ void Exit_Game(void)
 	GameReallyPaused = 0;
 	ROMLoaded = 0;
 }
+/**/
 
-/* swap all signals from port 0 with those from port 1 */
+#if 0/* swap all signals from port 0 with those from port 1 */
 void SwapPorts()
 {
 	unsigned int SwapVal;	/* hold values while swapping left and right port */
@@ -200,7 +204,9 @@ void SwapPorts()
 		IOPortA_UnusedBits = ((IOPortA_UnusedBits & 0xf0) >> 4) | ((IOPortA_UnusedBits & 0x0f) << 4);
 	}
 }
+#endif
 
+#if 0 //aks
 /*
 ** specific controller handling functions
 */
@@ -736,7 +742,9 @@ void DoPaddle_R()
 	if (Button[0]) IOPortA = IOPortA & 0xf7;
 	if (Button[1]) IOPortA = IOPortA & 0xfb;
 }
+#endif
 
+#if 0 //aks
 void DoKeypad_L()
 {
 	InputLatch[0] = 0x80;
@@ -800,7 +808,9 @@ void DoKeypad_R()
 		if (KeyTable[P2Pad2]) ChargeTrigger0[3] = CHARGEMAX;
 	}
 }
+#endif
 
+#if 0 //aks
 unsigned char DCTable[4] = {0x0f, 0x0d, 0x0c, 0x0e};
 
 void DoDriving_L()
@@ -946,7 +956,9 @@ void DoCompumate_L()
 void DoCompumate_R()
 {
 }
+#endif
 
+#if 0 //aks
 /*
 ** *JTZ* KidVid variables:
 ** TODO: "EJECT" tape when reset is pressed
@@ -1039,7 +1051,6 @@ void DoKidVid_L()
 
 void DoKidVid_R()
 {
-#if 0 //aks
 	if (KeyTable[KeyF1])
 	{
 		KeyTable[KeyF1] = 0;
@@ -1124,9 +1135,10 @@ void DoKidVid_R()
 			KidVidBlockIdx = KVBLOCKBITS;
 		}
 	}
-#endif
 }
+#endif
 
+#if 0 //aks
 //db MindlinkOR = 0x80;		/* set data bit */
 //db MindlinkAND = 0x3f;	/* clear Mindlink-connected bit */
 //db MindlinkTEST = 0x10;	/* test next out-bit signal */
@@ -1204,7 +1216,9 @@ void DoMindlink_R()
 	NextMindlinkBit_R();
 	if (srv_mouse_button) MindlinkPos_R = MindlinkPos_R | 0x4000; /* this bit starts a game */
 }
+#endif
 
+#if 0 //aks
 db TrakBallController = 0;	/* Do we use any TrakBall type controller */
 dd TrakBallCountV = 0;		/* how many new vertical values this frame */
 dd TrakBallCountH = 0;		/* how many new horizontal values this frame */
@@ -1353,7 +1367,9 @@ void DoMouseAmiga_R()
 	InputLatch[1] = 0x80;
 	if(srv_mouse_button) InputLatch[1] = 0;
 }
+#endif
 
+#if 0 //aks
 /*
 **
 ** this function initiates the CompuMate keyboard controller
@@ -1378,7 +1394,6 @@ void InitCompuMate()
 
 void DoCompuMate_LR()
 {
-#if 0 //aks
 	ChargeTrigger0[1] = 0;	/* will expire immediately / will be read as 0x80 */
 	ChargeTrigger0[2] = 0;
 
@@ -1456,9 +1471,10 @@ void DoCompuMate_LR()
 		default:
 		break;
 	}
-#endif
 }
+#endif
 
+#if 0 //aks
 void DoNoController_L()
 {
 	/* put unconnected pins in the default state */
@@ -1474,7 +1490,9 @@ void DoNoController_R()
 	ChargeTrigger0[2] = CHARGEMAX;	/* will not expire / will be read as 0 */
 	ChargeTrigger0[3] = CHARGEMAX;
 }
+#endif
 
+#if 0 //aks
 void ControlSWCHAWrite()
 {
 	if (LeftController == KP) DoKeypad_L();
@@ -1483,11 +1501,13 @@ void ControlSWCHAWrite()
 	{
 		SwapPorts();
 	}
+	#if 0 //aks
 	if ((LeftController == CM) && (RightController == CM))
 	{
 		DoCompuMate_LR();
 		IOPortA_Controllers = 0xff;
 	}
+	#endif
 	if (LeftController == ML)
 	{
 		NextMindlinkBit_L();
@@ -1501,7 +1521,9 @@ void ControlSWCHAWrite()
 		SwapPorts();
 	}
 }
+#endif
 
+#if 0 // aks: Remove most of this file, in particular Controls(). It's too SDL-specific. Better to redo up at the app layer.
 /*
 ** Controller handling code
 ** gets called once per frame
@@ -1514,7 +1536,7 @@ void Controls(void)
 
 	//srv_Events();			/* process SDL controller events */
 	//srv_get_mouse_movement();	/* poll mouse */
-#if 0 //aks
+
 	KeyTable[KeyAlt] = KeyTable[KeyLAlt] | KeyTable[KeyRAlt] | KeyTable[KeyLMeta] | KeyTable[KeyRMeta];
 	KeyTable[KeyCtrl] = KeyTable[KeyLCtrl] | KeyTable[KeyRCtrl];
 
@@ -1592,9 +1614,7 @@ void Controls(void)
 //		KeyTable[KeyEquals] = 0;	/* ... because SDLK_EQUALS&0x1ff == SDLK_F4&0x1ff ... */
 //		SaveScreenshot();			/* screenshots don't look so great with ... */
 //	}								/* ... square textures anyway */
-#endif
 
-#if 0 //aks
 	if (KeyTable[KeyAlt])	/* alter display only when ALT is pressed */
 	{
 		if (KeyTable[KeyMinus])	/* cycle through palettes - NTSC, PAL, SECAM */
@@ -1620,14 +1640,12 @@ void Controls(void)
 			KeyTable[KeyAlt] = 0;
 		}
 	}
-#endif
-#if 0 //aks	
+
 	if (KeyTable[KeyTab])	/* cycle through mouse directions for paddle */
 	{
 		KeyTable[KeyTab] = 0;
 		MPdirection = (MPdirection - 1) & 0x03;
 	}
-#endif
 
 	/* enable trace output when -t command line switch was used */
 	//if (KeyTable[KeyF11] && TraceEnabled) TraceCount = OldTraceCount;
@@ -1801,6 +1819,7 @@ void Controls(void)
 	/* IOPortA gets overwritten on output, so remember controller pins here */
 	IOPortA_Controllers = IOPortA;
 }
+#endif
 
 /**
 	z26 is Copyright 1997-2019 by John Saeger and contributors.  

@@ -22,7 +22,7 @@ void ReadAnalogINPT(void){
 
 void ReadDigitalINPT(void){
 
-	TestLightgunHit(RClock, ScanLine);
+	//TestLightgunHit(RClock, ScanLine);
 	DataBus = (DataBus & 0x3f) | InputLatch[AddressBus & 0x1];
 }
 

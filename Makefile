@@ -36,5 +36,9 @@ $(EXE):$(OFILES) $(EH_DEPS);$(PRECMD) $(LD) -o $@ $(OFILES) $(LDPOST)
 
 clean:;rm -rf mid out
 
-run:$(EXE);$(EXE) ~/rom/atari2600/p/pacman.bin
+#run:$(EXE);$(EXE) ~/rom/atari2600/p/pacman.bin
+run:$(EXE);$(EXE) ~/rom/atari2600/b/breakout.bin --paddles
+#run:$(EXE);$(EXE) ~/rom/atari2600/w/warlords.bin
+#run:$(EXE);$(EXE) ~/rom/atari2600/d/demons_diamonds.bin
+#run:$(EXE);$(EXE) ~/rom/atari2600/p/pong_sports.bin
 emuhost:;make -C../ra3 ; rm -f $(EXE)

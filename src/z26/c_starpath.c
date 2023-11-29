@@ -28,6 +28,14 @@
 
 */
 
+void Exit_Game(void)
+{
+	ExitEmulator = 128;
+	GamePaused = !LaunchedFromCommandline;
+	GameReallyPaused = 0;
+	ROMLoaded = 0;
+}
+
 dd SP_Scheme[8][2] = { /* table of bankswitch schemes */
 	{2 * 0x800,	3 * 0x800},
 	{0 * 0x800,	3 * 0x800},

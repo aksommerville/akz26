@@ -18,3 +18,23 @@ Go back to building it all in one pass, work from there.
 - [x] Right-player input
 - [x] Console switches (difficulty, color)
 - [ ] Audio is pretty bad. Look at c_soundq.c:QueueSoundBytes(), I bet we're coming up a little short.
+
+2023-11-29 Revamp input.
+I just commented out most of src/z26/controls.c in order to build for my Pi without SDL headers.
+Now clean it all up, and take the opportunity to ensure it works correctly this time.
+- [x] Cleanup.
+- [x] Check all console switches, compare to hardware.
+- [x] Left and right joysticks.
+- [x] Paddles. My preference is to emulate with the Atari Modern Joystick's twist.
+- - 0x00030007 absolute value in 0..999
+- - Considered adding a concept of Axis to Emuhost input, but that's a heavy lift, and probably only useful for this one thing.
+- [x] controls.c is now completely no-op -- remove it once we're done, just keeping for reference
+- - ...don't remove; keep it for reference
+
+Hardware:
+- Sticky Power, don't emulate.
+- Sticky Color
+- Sticky Left Difficulty
+- Sticky Right Difficulty
+- Hold Select
+- Hold Reset

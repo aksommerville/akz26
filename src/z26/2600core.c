@@ -86,7 +86,6 @@ void Reset_emulator(void)
 	RecognizeCart();
 	SetupBanks();
 	Reset();
-	Controls();
 }
 
 
