@@ -37,13 +37,20 @@ static uint16_t pv_p1=0,pv_p2=0;
 static int diff_p1=0,diff_p2=0,color=0; // difficulty and color switch hold their values
 static int akz26_paddlev[4]={0}; // 0..999; set at akz26_cb_input
 static int akz26_input_devices=AKZ26_INPUT_JOYSTICKS;
+static int reverse_joysticks=0;
 
 /* Joysticks input.
  */
  
 static void akz26_update_joysticks() {
-  uint16_t p1=eh_input_get(1);
-  uint16_t p2=eh_input_get(2);
+  uint16_t p1,p2;
+  if (reverse_joysticks) {
+    p1=eh_input_get(2);
+    p2=eh_input_get(1);
+  } else {
+    p1=eh_input_get(1);
+    p2=eh_input_get(2);
+  }
   
   IOPortA=0xff;
   IOPortB=0xff;
@@ -121,23 +128,28 @@ static void akz26_update_paddles() {
   
   IOPortA=0xcc;
   IOPortB=0xff;
-  if (p1&EH_BTN_SOUTH) IOPortA&=~0x7f;
-  if (p2&EH_BTN_SOUTH) IOPortA&=~0xbf;
-  if (p3&EH_BTN_SOUTH) IOPortA&=~0xf7;
-  if (p4&EH_BTN_SOUTH) IOPortA&=~0xfb;
+  if (p1&EH_BTN_WEST) IOPortA&=~0x80;
+  if (p1&EH_BTN_SOUTH) IOPortA&=~0x40;
+  // TODO The above agrees with Bumper Bash. Not sure where the player 2..4 buttons are supposed to go.
+  //if (p1&EH_BTN_WEST) IOPortA&=~0x20;
+  //if (p2&EH_BTN_WEST) IOPortA&=~0x10;
+  if (p2&EH_BTN_WEST) IOPortA&=~0x08;
+  if (p2&EH_BTN_SOUTH) IOPortA&=~0x04;
   ChargeTrigger0[0]=1+((999-akz26_paddlev[0])*239)/999;
   ChargeTrigger0[1]=1+((999-akz26_paddlev[1])*239)/999;
-  ChargeTrigger0[2]=1+((999-akz26_paddlev[2])*239)/999;
-  ChargeTrigger0[3]=1+((999-akz26_paddlev[3])*239)/999;
+  //ChargeTrigger0[2]=1+((999-akz26_paddlev[2])*239)/999;
+  //ChargeTrigger0[3]=1+((999-akz26_paddlev[3])*239)/999;
+  ChargeTrigger0[2]=ChargeTrigger0[0];
+  ChargeTrigger0[3]=ChargeTrigger0[1];
   
-  if (p1&EH_BTN_AUX1)  IOPortB&=~0x01; // RESET
-  if (p1&EH_BTN_AUX2)  IOPortB&=~0x02; // SELECT
-  if (p2&EH_BTN_AUX1)  IOPortB&=~0x01; // RESET
-  if (p2&EH_BTN_AUX2)  IOPortB&=~0x02; // SELECT
-  if (p3&EH_BTN_AUX1)  IOPortB&=~0x01; // RESET
-  if (p3&EH_BTN_AUX2)  IOPortB&=~0x02; // SELECT
-  if (p4&EH_BTN_AUX1)  IOPortB&=~0x01; // RESET
-  if (p4&EH_BTN_AUX2)  IOPortB&=~0x02; // SELECT
+  if (p1&EH_BTN_AUX1) IOPortB&=~0x01; // RESET
+  if (p1&EH_BTN_AUX2) IOPortB&=~0x02; // SELECT
+  if (p2&EH_BTN_AUX1) IOPortB&=~0x01; // RESET
+  if (p2&EH_BTN_AUX2) IOPortB&=~0x02; // SELECT
+  if (p3&EH_BTN_AUX1) IOPortB&=~0x01; // RESET
+  if (p3&EH_BTN_AUX2) IOPortB&=~0x02; // SELECT
+  if (p4&EH_BTN_AUX1) IOPortB&=~0x01; // RESET
+  if (p4&EH_BTN_AUX2) IOPortB&=~0x02; // SELECT
   
   /* Color and difficulty switches hold their state on a physical console.
    * We simulate that with a toggle button, and hold the state here.
@@ -236,7 +248,6 @@ static int akz26_cb_input(void *userdata,const struct eh_inmgr_event *event) {
     if ((event->srcdevid>0)&&(event->srcdevid<AKZ26_DEVID_LIMIT)) {
       int playerid=akz26_playerid_by_devid[event->srcdevid];
       if ((playerid>=1)&&(playerid<=4)) {
-        //fprintf(stderr,"paddle %d=%d\n",playerid,event->srcvalue);
         akz26_paddlev[playerid-1]=event->srcvalue;
       }
     }
@@ -248,7 +259,7 @@ static int akz26_cb_input(void *userdata,const struct eh_inmgr_event *event) {
  */
  
 static int _akz26_load_file(const char *path) {
-  fprintf(stderr,"%s %s\n",__func__,path);
+  //fprintf(stderr,"%s %s\n",__func__,path);
   def_LoadDefaults();
   
   /* cli.c */
@@ -287,6 +298,10 @@ static int _akz26_configure(const char *k,int kc,const char *v,int vc,int vn) {
     akz26_input_devices=AKZ26_INPUT_PADDLES;
     return 1;
   }
+  if ((kc==17)&&!memcmp(k,"reverse-joysticks",17)) {
+    reverse_joysticks=1;
+    return 1;
+  }
   return 0;
 }
 
@@ -301,7 +316,7 @@ int main(int argc,char **argv) {
     .iconh=0,
     .video_width=320,
     .video_height=256,
-    .video_format=EH_VIDEO_FORMAT_I8,//TODO confirm
+    .video_format=EH_VIDEO_FORMAT_I8,
     .video_rate=60,
     .audio_rate=31400,
     .audio_chanc=1,
