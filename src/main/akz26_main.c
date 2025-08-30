@@ -1,5 +1,5 @@
 #include "emuhost.h"
-#include "eh_inmgr.h"
+#include "inmgr/inmgr.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -222,37 +222,13 @@ static int _akz26_reset() {
  * This only gets called when we're in paddle mode.
  */
  
-/* Emuhost srcdevid can be any positive integer.
- * But they start at 1 when the process launches, and only grow when devices connect.
- * So if we impose a limit, it spares us a lot of hassle, and i think won't ever be a problem.
- */
-#define AKZ26_DEVID_LIMIT 256
-static int akz26_playerid_by_devid[AKZ26_DEVID_LIMIT]={0};
- 
-static int akz26_cb_input(void *userdata,const struct eh_inmgr_event *event) {
-  /**
-  fprintf(stderr,
-    "%s %d.%04x=%d[%04x] src=%d.%08x=%d\n",
-    __func__,
-    event->playerid,event->btnid,event->value,event->state,
-    event->srcdevid,event->srcbtnid,event->srcvalue
-  );
-  /**/
-  
-  // Capture player/device mapping from other events; the paddle events won't have a playerid.
-  if (event->playerid&&(event->srcdevid>0)&&(event->srcdevid<AKZ26_DEVID_LIMIT)) {
-    akz26_playerid_by_devid[event->srcdevid]=event->playerid;
-  }
-  
-  if ((event->srcbtnid==0x00030007)&&(event->srcvalue>=0)&&(event->srcvalue<=999)) {
-    if ((event->srcdevid>0)&&(event->srcdevid<AKZ26_DEVID_LIMIT)) {
-      int playerid=akz26_playerid_by_devid[event->srcdevid];
+static void akz26_cb_input(int devid,int btnid,int value,int state,void *userdata) {
+  if ((btnid==0x00030007)&&(value>=0)&&(value<=999)) {
+      int playerid=inmgr_playerid_for_devid(devid);
       if ((playerid>=1)&&(playerid<=4)) {
-        akz26_paddlev[playerid-1]=event->srcvalue;
+        akz26_paddlev[playerid-1]=value;
       }
-    }
   }
-  return 0;
 }
 
 /* Load game and start emulator.
@@ -275,15 +251,10 @@ static int _akz26_load_file(const char *path) {
   /* Prepare paddle reception.
    * Emuhost doesn't do analogue input through its general API, but we can read input devices directly too.
    * I'm hard-coding the Atari Joystick, it's the only device we support for now.
+   * TODO 2025-08-30: Emuhost's inmgr does now support analogue controls, but I haven't actually used it yet. This would be a good place to start.
    */
   if (akz26_input_devices==AKZ26_INPUT_PADDLES) {
-    struct eh_inmgr *inmgr=eh_get_inmgr();
-    if (inmgr) {
-      struct eh_inmgr_delegate inmgr_delegate={
-        .cb_event=akz26_cb_input,
-      };
-      eh_inmgr_listen_source(inmgr,0,&inmgr_delegate);
-    }
+    inmgr_listen(akz26_cb_input,0);
   }
   
   return 0;
